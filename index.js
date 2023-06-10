@@ -26,25 +26,49 @@ async function run() {
         // Connect the client to the server	(optional starting in v4.7)
         await client.connect();
 
-        const addToyCollection = client.db('autixir').collection('addToy');
-        
+        const toyCollection = client.db('autixir').collection('addToy');
+
         app.post('/addToy', async (req, res) => {
             const newAddToy = req.body;
-            const result = await addToyCollection.insertOne(newAddToy)
+            const result = await toyCollection.insertOne(newAddToy)
             res.send(result)
         })
 
         app.get('/addToy', async (req, res) => {
-            const cursor = addToyCollection.find()
+            const cursor = toyCollection.find()
             const result = await cursor.toArray()
             res.send(result)
         })
+
+        app.get('/addToy/email', async (req, res) => {
+            console.log(req.query)
+            let query = {};
+            if (req.query?.email) {
+                query = { email: req.query.email }
+            }
+            console.log(query)
+            const result = await toyCollection.find(query).toArray()
+            res.send(result)
+        })
+        app.delete('/addToy/:id', async (req, res) => {
+            const id = req.params.id;
+            const query = { _id: new ObjectId(id) }
+            const result = await toyCollection.deleteOne(query)
+            res.send(result)
+        })
+
+
         app.get('/addToy/:id', async (req, res) => {
             const id = req.params.id
             const query = { _id: new ObjectId(id) }
-            const result = await addToyCollection.findOne(query)
+            const result = await toyCollection.findOne(query)
             res.send(result)
         })
+        
+
+
+
+
 
 
 
