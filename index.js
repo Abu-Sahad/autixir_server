@@ -26,9 +26,13 @@ async function run() {
         // Connect the client to the server	(optional starting in v4.7)
         await client.connect();
 
-
+        const addToyCollection = client.db('autixir').collection('addToy');
         
-
+        app.post('/addToy', async (req, res) => {
+            const newAddToy = req.body;
+            const result = await addToyCollection.insertOne(newAddToy)
+            res.send(result)
+        })
 
 
 
