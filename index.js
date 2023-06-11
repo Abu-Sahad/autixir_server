@@ -24,7 +24,7 @@ const client = new MongoClient(uri, {
 async function run() {
     try {
         // Connect the client to the server	(optional starting in v4.7)
-        await client.connect();
+         client.connect();
 
         const toyCollection = client.db('autixir').collection('addToy');
 
@@ -50,15 +50,7 @@ async function run() {
             const result = await toyCollection.find(query).toArray()
             res.send(result)
         })
-        // app.get('/addToy/subCategory', async (req, res) => {
-        //     let query = {};
-        //     if (req.query?.subCategory) {
-        //         const subCategory = req.query.subCategory.replace(/\s/g, ''); // Remove spaces
-        //         query = { subCategory: { $regex: new RegExp(subCategory, 'i') } };
-        //     }
-        //     const result = await toyCollection.find(query).toArray();
-        //     res.send(result);
-        // });
+       
 
 
         app.delete('/addToy/:id', async (req, res) => {
