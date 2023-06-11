@@ -41,15 +41,26 @@ async function run() {
         })
 
         app.get('/addToy/email', async (req, res) => {
-            console.log(req.query)
+            //console.log(req.query)
             let query = {};
             if (req.query?.email) {
                 query = { email: req.query.email }
             }
-            console.log(query)
+            // console.log(query)
             const result = await toyCollection.find(query).toArray()
             res.send(result)
         })
+        // app.get('/addToy/subCategory', async (req, res) => {
+        //     let query = {};
+        //     if (req.query?.subCategory) {
+        //         const subCategory = req.query.subCategory.replace(/\s/g, ''); // Remove spaces
+        //         query = { subCategory: { $regex: new RegExp(subCategory, 'i') } };
+        //     }
+        //     const result = await toyCollection.find(query).toArray();
+        //     res.send(result);
+        // });
+
+
         app.delete('/addToy/:id', async (req, res) => {
             const id = req.params.id;
             const query = { _id: new ObjectId(id) }
@@ -64,8 +75,22 @@ async function run() {
             const result = await toyCollection.findOne(query)
             res.send(result)
         })
-        
 
+        app.put('/addToy/:id', async (req, res) => {
+            const id = req.params.id;
+            const filter = { _id: new ObjectId(id) };
+            const option = { upsert: true };
+            const toy = req.body;
+            const updatedToy = {
+                $set: {
+                    price: toy.price,
+                    detailsDescription: toy.detailsDescription,
+                    availableQuantity: toy.availableQuantity,
+                }
+            };
+            const result = await toyCollection.updateOne(filter, updatedToy, option);
+            res.send(result);
+        });
 
 
 
