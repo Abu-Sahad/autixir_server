@@ -26,6 +26,7 @@ async function run() {
          client.connect();
 
         const toyCollection = client.db('autixir').collection('addToy');
+        const futureCollection = client.db('autixir').collection('future');
 
         app.post('/addToy', async (req, res) => {
             const newAddToy = req.body;
@@ -35,6 +36,11 @@ async function run() {
 
         app.get('/addToy', async (req, res) => {
             const cursor = toyCollection.find()
+            const result = await cursor.toArray()
+            res.send(result)
+        })
+        app.get('/future', async (req, res) => {
+            const cursor = futureCollection.find()
             const result = await cursor.toArray()
             res.send(result)
         })
